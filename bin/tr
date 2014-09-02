@@ -1,3 +1,4 @@
 #!/usr/bin/ruby
 
+#time reporting code goes here
 puts "hello"
