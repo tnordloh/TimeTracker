@@ -1,7 +1,7 @@
 require relative 'settings'
 
 module TimeTracker
-  class TimeEntry
+  class DatabaseInitializer
     def initialize
 
     end

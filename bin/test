@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require_relative '../lib/settings.rb'
+require_relative '../lib/time_tracker.rb'
 
 tt = TimeTracker::Settings.new()
 
