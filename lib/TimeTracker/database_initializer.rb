@@ -24,12 +24,15 @@ module TimeTracker
       connect
       puts @db.execute "SELECT * FROM sqlite_master"
     end
+    def execute2 statement
+      connect
+      @db.execute2(statement) 
+    end
     def execute statement
       connect
       @db.execute(statement) 
     end
     def connect
-      puts "#{@settings.setting(:homedir)}/data/#{@settings.setting(:database)}" if @db == nil
       @db = SQLite3::Database.new "#{@settings.setting(:homedir)}/data/#{@settings.setting(:database)}" if @db == nil
     end
     def last_time_entry

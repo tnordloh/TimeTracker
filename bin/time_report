@@ -1,4 +1,15 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
+
+require_relative "../lib/time_tracker.rb"
 
 #time reporting code goes here
-puts "hello"
+tr=TimeTracker::Report.new()
+if(ARGV[0]== 'current')
+  tr.current()
+end
+if(ARGV[0]== 'last_day')
+  tr.last_day()
+end
+if(ARGV[0]== 'summary')
+  tr.summary(24)
+end
