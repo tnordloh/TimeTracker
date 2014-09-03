@@ -28,7 +28,7 @@ module TimeTracker
       starttime = (Time.now - 86400).to_i
       event "where time_entries.starttime > #{starttime}"
     end
-    def summary hours
+    def summary time = 24
       categories = @db.execute("select distinct(time_entries.id_category),categories.name from time_entries
                                join categories on categories.id = time_entries.id_category")
       categories.each do |row|

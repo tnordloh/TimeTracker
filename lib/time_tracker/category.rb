@@ -1,4 +1,4 @@
-require_relative 'database_initializer'
+require_relative 'database'
 
 module TimeTracker
 
@@ -10,9 +10,9 @@ module TimeTracker
       @db.execute "insert into categories(name) values('#{category.downcase}')"
     end
     def list
-      rs = @db.execute "select * from categories"
+      rs = @db.execute "select name from categories"
       rs.each do |row|
-        puts row.join "\s"
+        row.join "\s"
       end
     end
     def delete category
