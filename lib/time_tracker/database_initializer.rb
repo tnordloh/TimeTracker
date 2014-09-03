@@ -33,7 +33,7 @@ module TimeTracker
       @db.execute(statement) 
     end
     def connect
-      @db = SQLite3::Database.new "#{@settings.setting(:homedir)}/data/#{@settings.setting(:database)}" if @db == nil
+      @db = SQLite3::Database.new "#{@settings.setting('homedir')}/data/#{@settings.setting('database')}" if @db == nil
     end
     def last_time_entry
       connect

@@ -1,4 +1,2 @@
-{
-      :database   => 'timerecords.db',
-      :homedir   => '/Users/tim/code/time_tracker',
-}
+{"database":"timerecords.db",
+"homedir":"/Users/tim/code/time_tracker"}

@@ -1,3 +1,4 @@
+require 'json'
 module TimeTracker
 
   class Settings
@@ -16,8 +17,9 @@ module TimeTracker
     end
 
     def load_settings
-      @settings[:homedir]='/Users/tim/code/time_tracker'
-      @settings = eval(File.open("#{@settings[:homedir]}/conf/options") {|f| f.read.chomp })
+      @settings["homedir"]='/Users/tim/code/time_tracker'
+      @settings = JSON.parse(File.read("#{@settings["homedir"]}/conf/options"))
+      #@settings = eval(File.open("#{@settings["homedir"]}/conf/options") {|f| f.read.chomp })
     end
     def setting setting
       @settings[setting]
