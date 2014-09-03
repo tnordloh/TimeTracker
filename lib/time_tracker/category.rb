@@ -4,7 +4,7 @@ module TimeTracker
 
   class Category
     def initialize
-      @db= TimeTracker::DatabaseInitializer.new()
+      @db= TimeTracker::Database.new()
     end
     def add category
       @db.execute "insert into categories(name) values('#{category.downcase}')"

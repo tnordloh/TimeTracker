@@ -3,7 +3,7 @@ module TimeTracker
   class Report
 
     def initialize
-      @db= TimeTracker::DatabaseInitializer.new()
+      @db= TimeTracker::Database.new()
     end
 
     def event whereclause = " "

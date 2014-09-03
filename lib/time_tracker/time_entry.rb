@@ -3,7 +3,7 @@ require_relative 'database_initializer'
 module TimeTracker
   class TimeEntry
     def initialize
-      @db= TimeTracker::DatabaseInitializer.new()
+      @db= TimeTracker::Database.new()
     end
     def add_entry category,description
       rs = @db.execute("select id from categories where name='#{category}'")
