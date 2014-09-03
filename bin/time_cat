@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+require_relative "../lib/time_tracker.rb"
+#time reporting code goes here
+tt = TimeTracker::Category.new()
+if ARGV[0] == "add"
+  tt.add ARGV[1]
+end
+if ARGV[0] == "delete"
+  tt.delete ARGV[1]
+end
+if ARGV[0] == "list"
+  tt.list
+end

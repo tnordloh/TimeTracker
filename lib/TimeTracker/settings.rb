@@ -3,8 +3,9 @@ module TimeTracker
   class Settings
     attr_reader :settings
 
-    def initialize
+    def initialize homedir
       @settings = Hash.new()
+      @homedir = homedir
       load_settings
     end
 
@@ -15,7 +16,8 @@ module TimeTracker
     end
 
     def load_settings
-      @settings = eval(File.open('conf/options') {|f| f.read })
+      @settings[:homedir]='/Users/tim/code/time_tracker'
+      @settings = eval(File.open("#{@settings[:homedir]}/conf/options") {|f| f.read.chomp })
     end
     def setting setting
       @settings[setting]
