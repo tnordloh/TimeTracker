@@ -2,6 +2,5 @@
 
 require_relative '../lib/time_tracker.rb'
 
-tt = TimeTracker::Settings.new()
+tt = TimeTracker::DatabaseInitializer.new()
 
-tt.to_s

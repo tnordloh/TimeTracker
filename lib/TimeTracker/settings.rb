@@ -17,6 +17,9 @@ module TimeTracker
     def load_settings
       @settings = eval(File.open('conf/options') {|f| f.read })
     end
+    def setting setting
+      @settings[setting]
+    end
 
   end
 
