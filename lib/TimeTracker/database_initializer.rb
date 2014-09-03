@@ -32,5 +32,11 @@ module TimeTracker
       puts "#{@settings.setting(:homedir)}/data/#{@settings.setting(:database)}" if @db == nil
       @db = SQLite3::Database.new "#{@settings.setting(:homedir)}/data/#{@settings.setting(:database)}" if @db == nil
     end
+    def last_time_entry
+      connect
+      db=@db.execute("select max(id) from time_entries")
+      p db
+      db[0][0]
+    end
   end
 end

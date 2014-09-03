@@ -1,4 +1,9 @@
 #!/usr/bin/ruby
 
+
+require_relative "../lib/time_tracker.rb"
 #time entry code goes here
-puts "hello"
+te = TimeTracker::TimeEntry.new() 
+if(ARGV[0]) == "add"
+ te.add_entry(ARGV[1], ARGV[2]) 
+end
