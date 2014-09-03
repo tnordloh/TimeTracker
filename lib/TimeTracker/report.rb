@@ -7,8 +7,7 @@ module TimeTracker
     end
 
     def event whereclause = " "
-      stmt ='select time_entries.id,
-                     time_entries.starttime,
+      stmt ='select time_entries.starttime,
                      time_entries.finishtime,
                      categories.name as category,
                      time_entries.name as note
@@ -16,8 +15,8 @@ module TimeTracker
                      join categories on categories.id = time_entries.id_category ' + whereclause
       rs=@db.execute2(stmt)
       rs.each do |row|
+        row[0]= Time.at(row[0]).strftime("%F %T") if row[0] != nil && row[0].to_i != 0
         row[1]= Time.at(row[1]).strftime("%F %T") if row[1] != nil && row[1].to_i != 0
-        row[2]= Time.at(row[2]).strftime("%F %T") if row[2] != nil && row[2].to_i != 0
         puts (row.map {|r| r.to_s.ljust(19)}).join "|"
      end
     end
