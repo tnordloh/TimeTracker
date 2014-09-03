@@ -7,18 +7,19 @@ module TimeTracker
     end
 
     def event whereclause = " "
-      stmt ='select time_entries.starttime,
+      stmt ='select time_entries.id,
+                     time_entries.starttime,
                      time_entries.finishtime,
                      categories.name as category,
                      time_entries.name as note
                      from time_entries
                      join categories on categories.id = time_entries.id_category ' + whereclause
       rs=@db.execute2(stmt)
-      rs.each do |row|
-        row[0]= Time.at(row[0]).strftime("%F %T") if row[0] != nil && row[0].to_i != 0
+      rs.inject("") { |string,row| 
         row[1]= Time.at(row[1]).strftime("%F %T") if row[1] != nil && row[1].to_i != 0
-        puts (row.map {|r| r.to_s.ljust(19)}).join "|"
-     end
+        row[2]= Time.at(row[2]).strftime("%F %T") if row[2] != nil && row[2].to_i != 0
+        string += (row.map {|r| r.to_s.ljust(19)}).join("|")+ "\n"
+      }
     end
     def current
       starttime = (Time.now - 86400).to_i
@@ -31,11 +32,10 @@ module TimeTracker
     def summary time = 24
       categories = @db.execute("select distinct(time_entries.id_category),categories.name from time_entries
                                join categories on categories.id = time_entries.id_category")
-      categories.each do |row|
+      categories.inject("") { |string,row|
         minutes,seconds = (sum_category(row[0],24)).divmod(60)
-        puts "#{row[1]}: #{minutes} minutes, #{seconds} seconds"
-        #puts (row.map {|r| r.to_s.ljust(19)}).join "|"
-      end
+        string+=  "#{row[1].to_s.ljust(15)}: #{minutes.to_s.ljust(6)} minutes, #{seconds} seconds\n" 
+      }
     end
     def sum_category category,time
       times = @db.execute("select (finishtime-starttime) from time_entries where id_category=#{category} and finishtime is not null")

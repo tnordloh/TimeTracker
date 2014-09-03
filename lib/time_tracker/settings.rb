@@ -10,12 +10,6 @@ module TimeTracker
       load_settings
     end
 
-    def to_s
-      @settings.each {|key,value|
-        puts "#{key}, #{value}"
-      }
-    end
-
     def load_settings
       @settings["homedir"]=@homedir
       @settings = JSON.parse(File.read("#{@settings["homedir"]}/conf/options"))

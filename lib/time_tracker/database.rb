@@ -10,7 +10,7 @@ module TimeTracker
     end
     def describe table=nil
       connect
-      puts @db.execute "SELECT * FROM sqlite_master"
+      @db.execute "SELECT * FROM sqlite_master"
     end
     def execute2 statement
       connect
