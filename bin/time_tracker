@@ -3,4 +3,5 @@
 
 require_relative "../lib/time_tracker.rb"
 #time entry code goes here
-TimeTracker::TimeEntry.new().send(*ARGV)
+tt = TimeTracker::TimeEntry.new()
+tt.send(*ARGV) if  ["add_entry","back_entry"].include?(ARGV.first)

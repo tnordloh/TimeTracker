@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
 require_relative "../lib/time_tracker.rb"
 #time reporting code goes here
-puts TimeTracker::Category.new().send(*ARGV)
+
+tc= TimeTracker::Category.new()
+puts tc.send(*ARGV) if ["add","list","delete"].include?(ARGV.first)
