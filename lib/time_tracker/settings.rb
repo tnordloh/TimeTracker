@@ -15,6 +15,7 @@ module TimeTracker
       @settings = JSON.parse(File.read("#{@settings["homedir"]}/conf/options"))
       #@settings = eval(File.open("#{@settings["homedir"]}/conf/options") {|f| f.read.chomp })
     end
+
     def setting setting
       @settings[setting]
     end

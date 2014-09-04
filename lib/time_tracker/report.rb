@@ -6,6 +6,24 @@ module TimeTracker
       @db= TimeTracker::Database.new()
     end
 
+    def current
+      event "where time_entries.id in (select max(id) from time_entries)"
+    end
+
+    def last_day
+      starttime = (Time.now - 86400).to_i
+      event "where time_entries.starttime > #{starttime}"
+    end
+
+    def summary time = 24
+      categories = @db.execute('select distinct(time_entries.id_category),categories.name from '+
+                               'time_entries join categories on categories.id = time_entries.id_category') 
+      format_summary categories
+    end
+
+
+    private
+
     def event whereclause = " "
       stmt ='select time_entries.id,
                      time_entries.starttime,
@@ -14,32 +32,38 @@ module TimeTracker
                      time_entries.name as note
                      from time_entries
                      join categories on categories.id = time_entries.id_category ' + whereclause
-      rs=@db.execute2(stmt)
-      rs.inject("") { |string,row| 
-        row[1]= Time.at(row[1]).strftime("%F %T") if row[1] != nil && row[1].to_i != 0
-        row[2]= Time.at(row[2]).strftime("%F %T") if row[2] != nil && row[2].to_i != 0
+      format_table @db.execute2(stmt)
+    end
+
+    def format_summary categories
+      categories.inject("") { |string,row|
+        mytime = convert_seconds_to_hours_minutes_seconds(sum_category(row[0],24))
+        string+=  "#{row[1].to_s.ljust(10)}: #{mytime[0].to_s.rjust(2)} hours, #{mytime[1].to_s.rjust(2)} minutes, #{mytime[2]} seconds\n" 
+      }
+    end
+
+    def format_table data
+      data.inject("") { |string,row| 
+        unix_to_standard row[1]
+        unix_to_standard row[2]
         string += (row.map {|r| r.to_s.ljust(19)}).join("|")+ "\n"
       }
     end
-    def current
-      starttime = (Time.now - 86400).to_i
-      event "where time_entries.id in (select max(id) from time_entries)"
-    end
-    def last_day
-      starttime = (Time.now - 86400).to_i
-      event "where time_entries.starttime > #{starttime}"
-    end
-    def summary time = 24
-      categories = @db.execute("select distinct(time_entries.id_category),categories.name from time_entries
-                               join categories on categories.id = time_entries.id_category")
-      categories.inject("") { |string,row|
-        minutes,seconds = (sum_category(row[0],24)).divmod(60)
-        string+=  "#{row[1].to_s.ljust(15)}: #{minutes.to_s.ljust(6)} minutes, #{seconds} seconds\n" 
-      }
-    end
+
     def sum_category category,time
       times = @db.execute("select (finishtime-starttime) from time_entries where id_category=#{category} and finishtime is not null")
       times.inject(0) { |sum,row| sum+= row[0]}
+    end
+
+    def unix_to_standard time
+        time= Time.at(time).strftime("%F %T") if time != nil && time.to_i != 0
+    end
+
+    def convert_seconds_to_hours_minutes_seconds number
+        hours = number / (60*60)
+        minutes,seconds =number.divmod(60)
+        minutes -= hours*60
+        return [hours,minutes,seconds]
     end
   end
 end

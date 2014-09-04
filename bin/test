@@ -1,6 +1,5 @@
-#!/usr/bin/env ruby
-
-require_relative '../lib/time_tracker.rb'
-
-tt = TimeTracker::DatabaseInitializer.new()
-
+cd ~/code/time_tracker
+./bin/time_tracker add_entry learning "time entry app"
+./bin/time_report summary
+./bin/time_report last_day
+cd -

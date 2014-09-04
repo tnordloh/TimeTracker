@@ -11,9 +11,7 @@ module TimeTracker
     end
     def list
       rs = @db.execute "select name from categories"
-      rs.each do |row|
-        row.join "\s"
-      end
+      rs.each { |row| row.join "\s" }
     end
     def delete category
       rs = @db.execute "delete from categories where name='#{category}'"

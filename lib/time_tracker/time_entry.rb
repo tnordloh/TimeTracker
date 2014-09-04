@@ -6,16 +6,28 @@ module TimeTracker
     def initialize
       @db= TimeTracker::Database.new()
     end
+
     def add_entry category,description
       rs = @db.execute("select id from categories where name='#{category}'")
-      if rs.size == 0
-        catlist = TimeTracker::Category.new().list.each.inject([]) {|list,category| list << category}
-        raise "tnordloh:no category #{category} found: valid categories are #{catlist}" if rs.size == 0
-      end
-      time=Time.now.to_i
-      id = @db.last_time_entry
-      @db.execute "update time_entries set finishtime=#{time} where id=#{id}"
-      @db.execute "insert into time_entries (id_category,name,starttime) values(#{rs[0][0]},'#{description}',#{time})"
+      compose_add_entry_error if rs.size == 0
+      insert_time_entry rs[0][0], description
     end
+
+    def back_entry
+    end
+
+    private
+
+    def compose_add_entry_error category
+      catlist = TimeTracker::Category.new().list.each.inject([]) {|list,category| list << category}
+      raise "tnordloh:no category #{category} found: valid categories are #{catlist}" if rs.size == 0
+    end
+
+    def insert_time_entry cat_id, description
+      time=Time.now.to_i
+      @db.execute "update time_entries set finishtime=#{time} where id=#{@db.last_time_entry}"
+      @db.execute "insert into time_entries (id_category,name,starttime) values(#{cat_id},'#{description}',#{time})"
+    end
+
   end
 end
