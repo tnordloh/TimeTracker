@@ -43,13 +43,23 @@ module TimeTracker
     end
 
     def format_table data
+      widths=colsizes(data)
+      widths[1],widths[2] = 19,19
       data.inject("") { |string,row| 
-        unix_to_standard row[1]
-        unix_to_standard row[2]
-        string += (row.map {|r| r.to_s.ljust(19)}).join("|")+ "\n"
+        x=-1
+        row[1]=unix_to_standard row[1]
+        row[2]=unix_to_standard row[2]
+        string += (row.map {|r|
+                  x+=1
+                  r.to_s.ljust(widths[x]+2)
+                                }).join("|")+ "\n"
       }
     end
-
+    def colsizes data
+      list=[]
+      data.transpose.each {|col| list << (col.max {|a,b| a.to_s().length <=> b.to_s().length()}).to_s.length}
+      list
+    end
     def sum_category category,time
       times = @db.execute("select (finishtime-starttime) from time_entries where id_category=#{category} and finishtime is not null")
       times.inject(0) { |sum,row| sum+= row[0]}
