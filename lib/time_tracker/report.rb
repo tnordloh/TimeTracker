@@ -18,11 +18,18 @@ module TimeTracker
     def summary time = 24
       categories = @db.execute('select distinct(time_entries.id_category),categories.name from '+
                                'time_entries join categories on categories.id = time_entries.id_category') 
-      format_summary categories
+      summary_to_a categories
     end
 
+    def unix_to_standard time
+        time= Time.at(time).strftime("%F %T") if time != nil && time.to_i != 0
+    end
 
     private
+    def sum_category category,time
+      times = @db.execute("select (finishtime-starttime) from time_entries where id_category=#{category} and finishtime is not null")
+      times.inject(0) { |sum,row| sum+= row[0]}
+    end
 
     def event whereclause = " "
       @db.execute2('select time_entries.id,
@@ -34,38 +41,13 @@ module TimeTracker
                      join categories on categories.id = time_entries.id_category ' + whereclause)
     end
 
-    def format_summary categories
-      categories.inject("") { |string,row|
+    def summary_to_a categories
+      returnme = []
+      categories.each { |row|
         mytime = convert_seconds_to_hours_minutes_seconds(sum_category(row[0],24))
-        string+=  "#{row[1].to_s.ljust(10)}: #{mytime[0].to_s.rjust(2)} hours, #{mytime[1].to_s.rjust(2)} minutes, #{mytime[2]} seconds\n" 
+        returnme <<  [row[1], mytime[0] , mytime[1], mytime[2] ]
       }
-    end
-
-    def format_table data
-      widths=colsizes(data)
-      widths[1],widths[2] = 19,19
-      data.inject("") { |string,row| 
-        x=-1
-        row[1]=unix_to_standard row[1]
-        row[2]=unix_to_standard row[2]
-        string += (row.map {|r|
-                  x+=1
-                  r.to_s.ljust(widths[x]+2)
-                                }).join("|")+ "\n"
-      }
-    end
-    def colsizes data
-      list=[]
-      data.transpose.each {|col| list << (col.max {|a,b| a.to_s().length <=> b.to_s().length()}).to_s.length}
-      list
-    end
-    def sum_category category,time
-      times = @db.execute("select (finishtime-starttime) from time_entries where id_category=#{category} and finishtime is not null")
-      times.inject(0) { |sum,row| sum+= row[0]}
-    end
-
-    def unix_to_standard time
-        time= Time.at(time).strftime("%F %T") if time != nil && time.to_i != 0
+      returnme
     end
 
     def convert_seconds_to_hours_minutes_seconds number

@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 
 
-require_relative "../lib/time_tracker.rb"
+require_relative "../lib/cli"
 #time entry code goes here
-tt = TimeTracker::TimeEntry.new()
+tt = CLI::TimeEntry.new()
 tt.send(*ARGV) if  ["add_entry","back_entry"].include?(ARGV.first)
