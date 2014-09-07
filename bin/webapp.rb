@@ -19,8 +19,8 @@ end
 
 get '/add_entry' do
   select = Web::CategoryInterface.new().to_select 
-  current_activity = Web::ReportInterface.new().current 
-  erb :add_entry, :locals => {:select => select}
+  current= Web::ReportInterface.new().current 
+  erb :add_entry, :locals => {:select => select, :current => current}
 end
 
 post '/add_entry' do
