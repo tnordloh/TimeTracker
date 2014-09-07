@@ -6,11 +6,15 @@ require_relative '../lib/web'
 set :port, 8080
 set :static, true
 set :public_folder, "static"
-set :views, "views"
+set :views, settings.root + "/../lib/web/views" 
 
 enable :sessions
 get '/' do
   redirect to('/time_tracker')
+end
+
+get '/time_tracker' do
+  erb :index
 end
 
 get '/add_entry' do
@@ -40,7 +44,4 @@ post '/categories' do
   erb :categories_form, :locals => {:list => list}
 end
 
-get '/time_tracker' do
-  erb :index
-end
 
