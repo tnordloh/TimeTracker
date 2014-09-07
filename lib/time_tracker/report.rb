@@ -25,14 +25,13 @@ module TimeTracker
     private
 
     def event whereclause = " "
-      stmt ='select time_entries.id,
+      @db.execute2('select time_entries.id,
                      time_entries.starttime,
                      time_entries.finishtime,
                      categories.name as category,
                      time_entries.name as note
                      from time_entries
-                     join categories on categories.id = time_entries.id_category ' + whereclause
-      format_table @db.execute2(stmt)
+                     join categories on categories.id = time_entries.id_category ' + whereclause)
     end
 
     def format_summary categories

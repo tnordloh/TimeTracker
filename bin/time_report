@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
-require_relative "../lib/time_tracker.rb"
+require_relative "../lib/cli"
 
 #time reporting code goes here
-tr= TimeTracker::Report.new()
-puts tr.send(*ARGV) if ["summary","last_day","current"].include?(ARGV.first)
+cr= CLI::Report.new()
+puts cr.send(*ARGV) if ["summary","last_day","current"].include?(ARGV.first)
