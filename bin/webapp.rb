@@ -5,8 +5,8 @@ require_relative '../lib/web'
 
 set :port, 8080
 set :static, true
-set :public_folder, "static"
-set :views, settings.root + "/../lib/web/views" 
+set :public_folder, settings.root + "/../lib/web/static"
+set :views,         settings.root + "/../lib/web/views" 
 
 enable :sessions
 get '/' do
