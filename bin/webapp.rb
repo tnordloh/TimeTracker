@@ -44,4 +44,21 @@ post '/categories' do
   erb :categories_form, :locals => {:list => list}
 end
 
+get '/report' do
+  erb :report_form
+end
 
+get '/report_summary' do
+  report= Web::ReportInterface.new().summary()
+  erb :report_data, :locals => {:report => report}
+end
+
+get '/report_last_day' do
+  report= Web::ReportInterface.new().last_day()
+  erb :report_data, :locals => {:report => report}
+end
+
+get '/report_current' do
+  report= Web::ReportInterface.new().current()
+  erb :report_data, :locals => {:report => report}
+end
