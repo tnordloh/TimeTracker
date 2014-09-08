@@ -25,12 +25,13 @@ end
 
 post '/add_entry' do
   select = Web::CategoryInterface.new().to_select 
+  current= Web::ReportInterface.new().current 
   if(params[:date] == "")
     TimeTracker::TimeEntry.new().add_entry(params[:category],params[:note])
   else
     TimeTracker::TimeEntry.new().back_entry(params[:category],params[:note],params[:date] )
   end
-  erb :add_entry, :locals => {:select => select}
+  erb :add_entry, :locals => {:select => select, :current => current}
 end
 
 get '/categories' do
