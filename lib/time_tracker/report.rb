@@ -16,9 +16,8 @@ module TimeTracker
     end
 
     def summary time = 24
-      categories = @db.execute('select distinct(time_entries.id_category),categories.name from '+
-                               'time_entries join categories on categories.id = time_entries.id_category') 
-      summary_to_a categories
+      summary_to_a( @db.execute('select distinct(time_entries.id_category),categories.name from '+
+                               'time_entries join categories on categories.id = time_entries.id_category')) 
     end
 
     def unix_to_standard time

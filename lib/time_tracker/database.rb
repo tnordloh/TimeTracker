@@ -3,9 +3,25 @@ require_relative 'settings'
 require 'sqlite3'
 
 module TimeTracker
+  SmartData = Struct.new :array do
+    def header_names
+      return array[0]
+    end
+    def hash
+      @hash=Hash.new
+      array.transpose.each {|x| @hash[x[0]] = x[1..-1] }
+      @hash
+    end
+    def maxwidth row
+      (@hash[row].map {|x| 
+        x.to_s.size }
+      ).max
+    end
+  end
+
   class Database
     def initialize
-      @settings = TimeTracker::Settings.new(File.dirname(__FILE__).to_s+"/../../")
+      @settings = TimeTracker::Settings.new(File.dirname(__FILE__)+"/../../")
       @db = nil
     end
 
@@ -17,6 +33,11 @@ module TimeTracker
     def execute2 statement
       connect
       @db.execute2(statement) 
+    end
+
+    def execute3 statement
+      connect
+      to_struct @db.execute2(statement) 
     end
 
     def execute statement

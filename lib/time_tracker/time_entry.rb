@@ -9,6 +9,7 @@ module TimeTracker
     end
 
     def add_entry category,description,time=nil
+      puts "add_entry:values(#{cat_id},'#{description}',#{time})"
       rs = @db.execute("select id from categories where name='#{category}'")
       compose_add_entry_error if rs.size == 0
       insert_time_entry rs[0][0], description, time
@@ -34,6 +35,7 @@ module TimeTracker
     def insert_time_entry cat_id, description ,time=nil
       time=Time.now.to_i if time==nil
       @db.execute "update time_entries set finishtime=#{time} where id=#{@db.last_time_entry}"
+      puts "values(#{cat_id},'#{description}',#{time})"
       @db.execute "insert into time_entries (id_category,name,starttime) values(#{cat_id},'#{description}',#{time})"
     end
 

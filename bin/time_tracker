@@ -4,4 +4,9 @@
 require_relative "../lib/cli"
 #time entry code goes here
 tt = CLI::TimeEntry.new()
-tt.send(*ARGV) if %w[add_entry back_entry].include?(ARGV.first)
+valid_options= %w[add_entry back_entry]
+if %w[add_entry back_entry].include?(ARGV.first)
+   tt.send(*ARGV) 
+else
+  puts "invalid entry. valid options are #{valid_options.join(",")}"
+end
