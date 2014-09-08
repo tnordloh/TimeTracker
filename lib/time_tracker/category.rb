@@ -10,11 +10,10 @@ module TimeTracker
       @db.execute "insert into categories(name) values('#{category.downcase}')"
     end
     def list
-      rs = @db.execute "select name from categories"
-      rs.each { |row| row.join "\s" }
+      @db.execute("select name from categories").each { |row| row.join "\s" }
     end
     def delete category
-      rs = @db.execute "delete from categories where name='#{category}'"
+      @db.execute "delete from categories where name='#{category}'"
     end
   end
 

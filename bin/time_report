@@ -4,4 +4,4 @@ require_relative "../lib/cli"
 
 #time reporting code goes here
 cr= CLI::Report.new()
-puts cr.send(*ARGV) if ["summary","last_day","current"].include?(ARGV.first)
+puts cr.send(*ARGV) if %w[summary last_day current].include?(ARGV.first)

@@ -1,4 +1,4 @@
-require_relative "database_initializer"
+require_relative "../time_tracker"
 module TimeTracker
   class Report
 
@@ -42,12 +42,10 @@ module TimeTracker
     end
 
     def summary_to_a categories
-      returnme = []
-      categories.each { |row|
+      categories.map { |row| 
         mytime = convert_seconds_to_hours_minutes_seconds(sum_category(row[0],24))
-        returnme <<  [row[1], mytime[0] , mytime[1], mytime[2] ]
+        [row[1], mytime[0] , mytime[1], mytime[2] ]
       }
-      returnme
     end
 
     def convert_seconds_to_hours_minutes_seconds number

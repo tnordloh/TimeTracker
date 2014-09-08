@@ -5,7 +5,7 @@ require 'sqlite3'
 module TimeTracker
   class DatabaseInitializer
     def initialize
-      @settings = TimeTracker::Settings.new(File.dirname(__FILE__).to_s+"/../../")
+      @settings = TimeTracker::Settings.new("#{File.dirname(__FILE__)}/../../")
       @db = nil
     end
     def create_db
