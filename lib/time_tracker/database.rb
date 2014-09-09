@@ -37,7 +37,7 @@ module TimeTracker
 
     def execute3 statement
       connect
-      to_struct @db.execute2(statement) 
+      header_names to_struct execute2(statement) 
     end
 
     def execute statement

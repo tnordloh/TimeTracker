@@ -3,7 +3,6 @@ module TimeTracker
   class Report
 
     def initialize
-      @db= TimeTracker::Database.new()
     end
 
     def current
@@ -16,8 +15,11 @@ module TimeTracker
     end
 
     def summary time = 24
-      summary_to_a( @db.execute('select distinct(time_entries.id_category),categories.name from '+
-                               'time_entries join categories on categories.id = time_entries.id_category')) 
+      #summary_to_a( @db.execute('select distinct(time_entries.id_category),categories.name from '+
+      #                         'time_entries join categories on categories.id = time_entries.id_category')) 
+      summary_to_a DB::Time_entries.select("distinct(time_entries.id_category),categories.name").joins("join categories on categories.id = time_entries.id_category").map {|x|
+        x.id_category
+      }
     end
 
     def unix_to_standard time
@@ -26,8 +28,10 @@ module TimeTracker
 
     private
     def sum_category category,time
-      times = @db.execute("select (finishtime-starttime) from time_entries where id_category=#{category} and finishtime is not null")
-      times.inject(0) { |sum,row| sum+= row[0]}
+      x= DB::Time_entries.where(id_category: category  ).where.not(finishtime: nil)
+      x.inject(0) { |sum,row| 
+        sum+= row.finishtime.to_i - row.starttime.to_i  
+      }
     end
 
     def event whereclause = " "
@@ -41,9 +45,9 @@ module TimeTracker
     end
 
     def summary_to_a categories
-      categories.map { |row| 
-        mytime = convert_seconds_to_hours_minutes_seconds(sum_category(row[0],24))
-        [row[1], mytime[0] , mytime[1], mytime[2] ]
+      categories.map { |category| 
+        mytime = convert_seconds_to_hours_minutes_seconds(sum_category(category,24))
+        [DB::Categories.find_by(Id: category).Name, mytime[0] , mytime[1], mytime[2] ]
       }
     end
 

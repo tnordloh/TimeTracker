@@ -1,19 +1,15 @@
 require_relative 'database'
 
 module TimeTracker
-
   class Category
-    def initialize
-      @db= TimeTracker::Database.new()
-    end
     def add category
-      @db.execute "insert into categories(name) values('#{category.downcase}')"
+      DB::Categories.create(Name: category)
     end
     def list
-      @db.execute("select name from categories").each { |row| row.join "\s" }
+      DB::Categories.all.map {|x| x.Name}
     end
     def delete category
-      @db.execute "delete from categories where name='#{category}'"
+      DB::Categories.find_by(Name: category).destroy
     end
   end
 

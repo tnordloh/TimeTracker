@@ -9,13 +9,14 @@ module TimeTracker
     end
 
     def add_entry category,description,time=nil
-      puts "add_entry:values(#{cat_id},'#{description}',#{time})"
+      puts "add_entry:values(#{category},'#{description}',#{time})"
       rs = @db.execute("select id from categories where name='#{category}'")
       compose_add_entry_error if rs.size == 0
       insert_time_entry rs[0][0], description, time
     end
 
     def back_entry category,description, time
+      puts "add_entry:values(#{category},'#{description}',#{time})"
       x=@db.execute "select max(finishtime) from time_entries"
       t=Time.parse(time).to_i
       if t > x[0][0]
