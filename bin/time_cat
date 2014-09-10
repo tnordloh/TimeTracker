@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
-require_relative "../lib/time_tracker.rb"
+require_relative "../lib/cli"
 #time reporting code goes here
 
-tc= TimeTracker::Category.new()
+tc= Cli::Category.new()
 puts tc.send(*ARGV) if %w[add list delete].include?(ARGV.first)

@@ -17,7 +17,7 @@ module CLI
       widths=colsizes(data)
       widths["finishtime"],widths["starttime"] = 19,19
       data.inject("") { |string,r| 
-        string+"#{r.Id.to_s.ljust(widths["Id"])}|#{r.name.ljust(widths["name"])}|#{unix_to_standard(r.starttime).ljust(19)}|#{unix_to_standard(r.finishtime).ljust(19)}|#{DB::Categories.find_by(r.id_category).Name}\n" 
+        string+"#{r.Id.to_s.ljust(widths["Id"])}|#{r.name.ljust(widths["name"])}|#{unix_to_standard(r.starttime).ljust(19)}|#{unix_to_standard(r.finishtime).ljust(19)}|#{DB::Categories.find(r.id_category).Name}\n" 
       }
     end
     def colsizes data

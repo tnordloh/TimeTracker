@@ -11,15 +11,10 @@ module TimeTracker
 
     def last_day
       starttime = (Time.now - 86400).to_i
-
-      p DB::Time_entries.joins("join categories on categories.id = time_entries.id_category").where("time_entries.starttime> #{starttime}").map 
-      #DB::Time_entries.joins("join categories on categories.id = time_entries.id_category").where("time_entries.starttime> #{starttime}").map 
-      #event "where time_entries.starttime > #{starttime}"
+      DB::Time_entries.joins("join categories on categories.id = time_entries.id_category").where("time_entries.starttime> #{starttime}").map 
     end
 
     def summary time = 24
-      #summary_to_a( @db.execute('select distinct(time_entries.id_category),categories.name from '+
-      #                         'time_entries join categories on categories.id = time_entries.id_category')) 
       summary_to_a DB::Time_entries.select("distinct(time_entries.id_category),categories.name").joins("join categories on categories.id = time_entries.id_category").map {|x|
         x.id_category
       }
