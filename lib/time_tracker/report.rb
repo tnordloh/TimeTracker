@@ -6,12 +6,15 @@ module TimeTracker
     end
 
     def current
-      event "where time_entries.id in (select max(id) from time_entries)"
+      x =DB::Time_entries.find(DB::Time_entries.maximum(:id))
     end
 
     def last_day
       starttime = (Time.now - 86400).to_i
-      event "where time_entries.starttime > #{starttime}"
+
+      p DB::Time_entries.joins("join categories on categories.id = time_entries.id_category").where("time_entries.starttime> #{starttime}").map 
+      #DB::Time_entries.joins("join categories on categories.id = time_entries.id_category").where("time_entries.starttime> #{starttime}").map 
+      #event "where time_entries.starttime > #{starttime}"
     end
 
     def summary time = 24
@@ -23,7 +26,10 @@ module TimeTracker
     end
 
     def unix_to_standard time
-        time= Time.at(time).strftime("%F %T") if time != nil && time.to_i != 0
+        if time != nil && time.to_i != 0
+          return Time.at(time).strftime("%F %T") if time != nil && time.to_i != 0
+        end
+        return ""
     end
 
     private
