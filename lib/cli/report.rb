@@ -13,6 +13,7 @@ module CLI
     def last_day
       format_table super()
     end
+#todo:  this is just dumb.  Fix.
     def format_table data
       widths=colsizes(data)
       widths["finishtime"],widths["starttime"] = 19,19
@@ -20,6 +21,7 @@ module CLI
         string+"#{r.Id.to_s.ljust(widths["Id"])}|#{r.name.ljust(widths["name"])}|#{unix_to_standard(r.starttime).ljust(19)}|#{unix_to_standard(r.finishtime).ljust(19)}|#{DB::Categories.find(r.id_category).Name}\n" 
       }
     end
+#todo:  this is just dumb.  Fix.
     def colsizes data
       data.each_with_object(Hash.new(0)) {|row,myhash|
         row.attribute_names.each {|x| 

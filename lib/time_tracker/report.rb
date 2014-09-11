@@ -3,11 +3,8 @@ module TimeTracker
   class Report
 #TODO: rename the id_category field to category_id, which will eliminate the need for coding the join as seen below.
     JOIN="join categories on categories.id = time_entries.id_category"
-    def initialize
-    end
-
     def current
-      x =DB::Time_entries.find(DB::Time_entries.maximum(:id))
+      DB::Time_entries.find(DB::Time_entries.maximum(:id))
     end
 
     def last_day
