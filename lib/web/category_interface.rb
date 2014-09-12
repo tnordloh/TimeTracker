@@ -6,7 +6,7 @@ module Web
     end
     def to_select category = "category"
       "<select id='#{category}' name='#{category}'>\n"+ list().map {|item|
-        "<option value='#{item[1]}'>#{item[1]}</option>\n"
+        "<option value='#{item[:name]}'>#{item[:name]}</option>\n"
       }.join("\n") + "</select>"
     end
     def to_rows

@@ -1,6 +1,7 @@
 require_relative "../time_tracker"
 module TimeTracker
   class Report
+
 #TODO: rename the id_category field to category_id, which will eliminate the need for coding the join as seen below.
     JOIN="join categories on categories.id = time_entries.id_category"
     def current
@@ -46,5 +47,6 @@ module TimeTracker
         minutes -= hours*60
         return [hours,minutes,seconds]
     end
+
   end
 end
