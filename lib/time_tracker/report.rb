@@ -3,7 +3,7 @@ module TimeTracker
   class Report
 
 #TODO: rename the id_category field to category_id, which will eliminate the need for coding the join as seen below.
-    JOIN="join categories on categories.id = time_entries.id_category"
+    JOIN="join category on category.id = time_entries.category_id"
     def current
       DB::Time_entries.find(DB::Time_entries.maximum(:id))
     end
@@ -16,8 +16,8 @@ module TimeTracker
 
     def summary time = 24
 #TODO: rename the id_category field to category_id, which will eliminate the need for coding the join as seen below.
-      summary_to_a DB::Time_entries.select("distinct(time_entries.id_category),categories.name").joins(JOIN).map {|x|
-        x.id_category
+      summary_to_a DB::Time_entries.select("distinct(time_entries.category_id),category.name").joins(JOIN).map {|x|
+        x.category_id
       }
     end
 
@@ -30,14 +30,14 @@ module TimeTracker
 
     private
     def sum_category category,time
-      x= DB::Time_entries.where(id_category: category  ).where.not(finishtime: nil)
+      x= DB::Time_entries.where(category_id: category  ).where.not(finishtime: nil)
       x.inject(0) { |sum,row| sum+ row.finishtime.to_i - row.starttime.to_i  }
     end
 
-    def summary_to_a categories
-      categories.map { |category| 
+    def summary_to_a cats
+      cats.map { |category| 
         mytime = convert_seconds_to_hours_minutes_seconds(sum_category(category,24))
-        [DB::Categories.find(category).Name, mytime[0] , mytime[1], mytime[2] ]
+        [DB::Category.find(category).name, mytime[0] , mytime[1], mytime[2] ]
       }
     end
 

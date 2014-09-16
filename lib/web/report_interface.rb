@@ -3,7 +3,7 @@ module Web
   class ReportInterface < TimeTracker::Report
     def current
       data= super()
-      "category:#{DB::Categories.find_by(data.id_category).Name} name:#{data.name} starttime:#{unix_to_standard(data.starttime)} finishtime:#{unix_to_standard(data.finishtime)}"
+      "category:#{DB::Category.find_by(data.category_id).name} name:#{data.name} starttime:#{unix_to_standard(data.starttime)} finishtime:#{unix_to_standard(data.finishtime)}"
     end
     def summary
       "<table border=1><tr><th>category<th>hours<th>minutes<th>seconds<tr>" + super().inject("") {|string,row|

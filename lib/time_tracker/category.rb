@@ -3,17 +3,17 @@ module TimeTracker
   class Category
 
     def add category
-      DB::Categories.create(Name: category)
+      DB::Category.create(name: category)
     end
 
     Category = Struct.new(:id, :name)
 
     def list
-      DB::Categories.all.collect() {|item| Category.new(item.Id,item.Name) }
+      DB::Category.all.collect() {|item| Category.new(item.id,item.name) }
     end
 
     def delete category
-      DB::Categories.find_by(Name: category).destroy
+      DB::Category.find_by(name: category).destroy
     end
 
   end

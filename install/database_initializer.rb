@@ -1,4 +1,4 @@
-require_relative 'settings'
+require_relative '../lib/time_tracker'
 
 require 'sqlite3'
 
@@ -10,13 +10,13 @@ module TimeTracker
     end
     def create_db
       connect
-      @db.execute "CREATE TABLE IF NOT EXISTS categories(Id INTEGER PRIMARY KEY, Name TEXT)"
-      @db.execute "CREATE TABLE IF NOT EXISTS time_entries(Id INTEGER PRIMARY KEY, 
+      @db.execute "CREATE TABLE IF NOT EXISTS category(id INTEGER PRIMARY KEY, Name TEXT)"
+      @db.execute "CREATE TABLE IF NOT EXISTS time_entries(id INTEGER PRIMARY KEY, 
                    name TEXT, 
                    starttime INTEGER, 
                    finishtime INTEGER, 
-                   id_category INTEGER,
-                   foreign key(id_category) references categories(Id))"
+                   category_id INTEGER,
+                   foreign key(category_id) references category(id))"
     end
   end
 end
