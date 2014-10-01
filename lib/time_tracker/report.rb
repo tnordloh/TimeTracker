@@ -2,7 +2,6 @@ require_relative "../time_tracker"
 module TimeTracker
   class Report
 
-#TODO: rename the id_category field to category_id, which will eliminate the need for coding the join as seen below.
     JOIN="join category on category.id = time_entries.category_id"
     def current
       DB::Time_entries.find(DB::Time_entries.maximum(:id))
@@ -10,12 +9,10 @@ module TimeTracker
 
     def last_day
       starttime = (Time.now - 86400).to_i
-#TODO: rename the id_category field to category_id, which will eliminate the need for coding the join as seen below.
       DB::Time_entries.joins(JOIN).where("time_entries.starttime> #{starttime}").map 
     end
 
     def summary time = 24
-#TODO: rename the id_category field to category_id, which will eliminate the need for coding the join as seen below.
       summary_to_a DB::Time_entries.select("distinct(time_entries.category_id),category.name").joins(JOIN).map {|x|
         x.category_id
       }
@@ -42,11 +39,19 @@ module TimeTracker
     end
 
     def convert_seconds_to_hours_minutes_seconds number
-        hours = number / (60*60)
-        minutes,seconds =number.divmod(60)
-        minutes -= hours*60
-        return [hours,minutes,seconds]
+      t=MakeTime.new(number)
+      return [t.hours,t.minutes,t.seconds]
     end
-
+    MakeTime = Struct.new(:number) {
+      def hours 
+        number / (60*60)
+      end
+      def minutes 
+        number / 60  - self.hours()*60
+      end
+      def seconds 
+        number % 60
+      end
+    }
   end
 end
